@@ -1,22 +1,11 @@
-import Home from './pages/home'
-import Navbar from './compnents/navbar'
-import Footer from './pages/footer'
-import ProductDetail from './pages/ProductDetails'
-import ProductReviews from './pages/Test'
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
+import { BrowserRouter } from "react-router-dom";
+import MainRoutes from "./routes.jsx";
 
 function App() {
   return(
-    <>
-      <Navbar/>
-      <Home/>
-      <ProductDetail />
-      <ProductReviews />
-      <Login />
-      <Register/>
-      <Footer/>
-    </>
+    <BrowserRouter>
+     <MainRoutes />
+   </BrowserRouter>
   )
 }
 

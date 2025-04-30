@@ -1,9 +1,9 @@
 import React from "react";
-import InstagramIcon from "../compnents/ui/InstagramIcon";
-import FacebookIcon from "../compnents/ui/FacebookIcon";
-import TwitterIcon from "../compnents/ui/TwitterIcon";
-import LinkedInIcon from "../compnents/ui/LinkedInIcon";
-import ShopMetricLogo from "../compnents/ui/ShopMetricLogo";
+import InstagramIcon from "./ui/InstagramIcon";
+import FacebookIcon from "./ui/FacebookIcon";
+import TwitterIcon from "./ui/TwitterIcon";
+import LinkedInIcon from "./ui/LinkedInIcon";
+import ShopMetricLogo from "./ui/ShopMetricLogo";
 
 export default function Footer() {
   return (
