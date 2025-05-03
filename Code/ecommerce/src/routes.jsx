@@ -4,7 +4,9 @@ import Home from "./pages/home";
 import ProductDetail from "./pages/ProductDetails";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import ProductReviews from './compnents/productReview';
+import ProductReviews from './components/productReview';
+import GamingProductSections from "./components/TopProducts";
+// import Test from './pages/test';
 
 function MainRoutes() {
   return (
@@ -13,11 +15,15 @@ function MainRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
+      <Route path="/home"element={<Home/>}/>
       {/* <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} /> */}
       <Route path="/productDetails" element={<ProductDetail />} />
       <Route path="/productReviews" element = {<ProductReviews />} />
+      <Route path="/products" element = {< GamingProductSections/>}/>
+      {/* <Route path="/test" element = {<Test/>}/> */}
     </Routes>
+
   );
 }
 
