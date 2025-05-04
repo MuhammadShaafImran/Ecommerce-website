@@ -5,67 +5,83 @@ import SupportIcon from "./ui/SupportIcon";
 
 export default function Additional_Info() {
   return (
-    <div className="bg-white text-gray-900 py-8 relative overflow-hidden">
-      {/* Grid background for consistency with hero */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 grid grid-cols-12">
-          {Array(13).fill(0).map((_, i) => (
+    <section className="py-12 relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-900 to-blue-900">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 grid grid-cols-8 grid-rows-8">
+          {Array(9).fill(0).map((_, i) => (
             <div 
               key={`col-${i}`} 
               className="absolute top-0 bottom-0 w-px bg-blue-500/10" 
               style={{ 
-                left: `${(i / 12) * 100}%`,
-                opacity: i % 3 === 0 ? 0.15 : 0.08 
+                left: `${(i / 8) * 100}%`,
+                opacity: i % 2 === 0 ? 0.15 : 0.08 
+              }} 
+            />
+          ))}
+          {Array(9).fill(0).map((_, i) => (
+            <div 
+              key={`row-${i}`} 
+              className="absolute left-0 right-0 h-px bg-blue-500/10" 
+              style={{ 
+                top: `${(i / 8) * 100}%`,
+                opacity: i % 2 === 0 ? 0.15 : 0.08 
               }} 
             />
           ))}
         </div>
+        
+        {/* Radial gradient overlay */}
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: 'radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, rgba(15, 23, 42, 0) 70%)',
+            mixBlendMode: 'screen'
+          }}
+        />
       </div>
       
-      {/* Subtle glow effect */}
-      <div className="absolute inset-0 opacity-30" 
-           style={{ 
-             background: 'radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, rgba(15, 23, 42, 0) 70%)',
-             mixBlendMode: 'screen'
-           }} />
-      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          
-          <div className="flex items-center space-x-4 p-4 border border-blue-700/30 rounded-lg bg-blue-900/20 backdrop-blur-sm w-full md:w-auto">
-            <div className="p-3 bg-blue-600/20 rounded-full">
-              <SecureIcon className="text-blue-400 w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-white font-bold tracking-wider">100% SECURE</p>
-              <p className="text-blue-300 font-medium text-sm">CHECKOUT</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-4 p-4 border border-blue-700/30 rounded-lg bg-blue-900/20 backdrop-blur-sm w-full md:w-auto">
-            <div className="p-3 bg-blue-600/20 rounded-full">
-              <ShippingIcon className="text-blue-400 w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-white font-bold tracking-wider">SHIPPING TO OVER 70</p>
-              <p className="text-blue-300 font-medium text-sm">COUNTRIES</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="group bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-blue-600/20 rounded-lg group-hover:bg-blue-600/30 transition-colors">
+                <SecureIcon className="text-blue-400 w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-white font-bold tracking-wider">100% SECURE</p>
+                <p className="text-gray-400 text-sm mt-1">Protected checkout process</p>
+              </div>
             </div>
           </div>
           
-          <div className="flex items-center space-x-4 p-4 border border-blue-700/30 rounded-lg bg-blue-900/20 backdrop-blur-sm w-full md:w-auto">
-            <div className="p-3 bg-blue-600/20 rounded-full">
-              <SupportIcon className="text-blue-400 w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-white font-bold tracking-wider">OUTSTANDING</p>
-              <p className="text-blue-300 font-medium text-sm">SUPPORT</p>
+          <div className="group bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-purple-600/20 rounded-lg group-hover:bg-purple-600/30 transition-colors">
+                <ShippingIcon className="text-purple-400 w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-white font-bold tracking-wider">GLOBAL SHIPPING</p>
+                <p className="text-gray-400 text-sm mt-1">Delivering to 70+ countries</p>
+              </div>
             </div>
           </div>
           
+          <div className="group bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 hover:border-pink-500/50 transition-all duration-300">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-pink-600/20 rounded-lg group-hover:bg-pink-600/30 transition-colors">
+                <SupportIcon className="text-pink-400 w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-white font-bold tracking-wider">24/7 SUPPORT</p>
+                <p className="text-gray-400 text-sm mt-1">Expert assistance anytime</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
-      {/* Animated particles for visual consistency */}
+      {/* Animated particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {Array(5).fill(0).map((_, i) => (
           <div 
@@ -84,7 +100,7 @@ export default function Additional_Info() {
         ))}
       </div>
       
-      {/* Add keyframes for floating animation */}
+      {/* Animation keyframes */}
       <style jsx>{`
         @keyframes float {
           0%, 100% {
@@ -101,6 +117,9 @@ export default function Additional_Info() {
           }
         }
       `}</style>
-    </div>
+
+      {/* Bottom fade effect */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-900 to-transparent" />
+    </section>
   );
 }

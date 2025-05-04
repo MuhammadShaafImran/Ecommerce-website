@@ -1,0 +1,11 @@
+name,description,price,category_id
+"Xbox Wireless Controller","Official Xbox wireless controller",59.99,1
+"PlayStation Controller","DualShock 4 wireless controller",49.99,1
+"Mechanical Keyboard","RGB backlit mechanical keyboard",89.99,2
+"Gaming Keyboard","Ergonomic gaming keyboard with macros",129.99,2
+"Nintendo Switch","Portable gaming console",299.99,3
+"PlayStation 5","Latest Sony gaming console",499.99,3
+"Logitech Mouse","Wireless optical mouse",29.99,4
+"Razer DeathAdder","High precision gaming mouse",69.99,4
+"Xbox Elite Controller","Premium customizable Xbox controller",149.99,1
+"Corsair Keyboard","Mechanical keyboard with wrist rest",109.99,2

@@ -1,200 +1,344 @@
-import { useState } from 'react';
+// pages/ProductDetails.jsx
+import React, { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Star, Minus, Plus, Heart, Share2, Truck, RotateCcw, Shield } from 'lucide-react';
+import Button from '../components/ui/Button';
+import ProductCard from '../components/ui/ProductCard';
 
-export default function ProductDetail() {
-  const [selectedWeight, setSelectedWeight] = useState('Medium');
-  const [selectedSize, setSelectedSize] = useState('15');
-  const [selectedFlavor, setSelectedFlavor] = useState('Hydrogen');
+const ProductDetails = () => {
+  const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
-  const [activeImage, setActiveImage] = useState(0);
-
-  const productImages = [
-    "/api/placeholder/300/600", // Main image (red bottle)
-    "/api/placeholder/300/600", // Blue variant
-    "/api/placeholder/300/600", // Black variant
-    "/api/placeholder/300/600", // Another red variant
+  const [activeTab, setActiveTab] = useState('description');
+  
+  // Hardcoded sample products data
+  const sampleProducts = [
+    {
+      id: "1",
+      title: "PlayStation 5 DualSense Controller",
+      price: 69.99,
+      oldPrice: 89.99,
+      category: "Controllers",
+      rating: 5,
+      image: "../../media/Sony-PlayStation-PS5-DualSense-Wireless-Controller.png",
+      description: "Experience gaming like never before with the PS5 DualSense Controller. Features haptic feedback, adaptive triggers, and built-in microphone.",
+      specifications: {
+        connectivity: "Wireless & USB-C",
+        batteryLife: "12 hours",
+        compatibility: "PS5, PC",
+        dimensions: "160 x 66 x 106 mm",
+        weight: "280g"
+      }
+    },
+    {
+      id: "2",
+      title: "Razer BlackShark V2 Pro",
+      price: 179.99,
+      category: "Headsets",
+      rating: 4,
+      image: "../../media/test-game.jpg",
+      description: "Professional-grade wireless gaming headset with THX Spatial Audio and premium comfort."
+    },
+    {
+      id: "3",
+      title: "Logitech G Pro X Superlight",
+      price: 149.99,
+      category: "Mice",
+      rating: 5,
+      image: "../../media/test-game.jpg",
+      description: "Ultra-lightweight wireless gaming mouse designed for esports professionals."
+    },
+    {
+      id: "4",
+      title: "SteelSeries Apex Pro",
+      price: 199.99,
+      category: "Keyboards",
+      rating: 4,
+      image: "../../media/test-game.jpg",
+      description: "Mechanical gaming keyboard with adjustable actuation and OLED smart display."
+    }
   ];
 
-  const handleDecreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
+  // Find the product with the matching id
+  const product = sampleProducts.find(p => p.id === id) || sampleProducts[0];
+  
+  // Get related products
+  const relatedProducts = sampleProducts
+    .filter(p => p.category === product.category && p.id !== product.id)
+    .slice(0, 4);
+  
+  const handleIncrement = () => {
+    setQuantity(prev => prev + 1);
   };
-
-  const handleIncreaseQuantity = () => {
-    setQuantity(quantity + 1);
+  
+  const handleDecrement = () => {
+    setQuantity(prev => (prev > 1 ? prev - 1 : 1));
   };
-
+  
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8">
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Product Images Section */}
-        <div className="w-full md:w-1/2">
-          <div className="flex md:flex-row flex-col-reverse gap-4">
-            {/* Thumbnail Images */}
-            <div className="flex md:flex-col flex-row gap-2 md:w-24">
-              {productImages.map((image, index) => (
-                <div 
-                  key={index}
-                  className={`border rounded-lg cursor-pointer p-2 ${activeImage === index ? 'border-gray-800' : 'border-gray-200'}`}
-                  onClick={() => setActiveImage(index)}
-                >
-                  <img 
-                    src={image} 
-                    alt={`Product thumbnail ${index + 1}`} 
-                    className="w-full h-auto object-contain aspect-square"
-                  />
-                </div>
-              ))}
-            </div>
-            
-            {/* Main Image */}
-            <div className="flex-1 border rounded-lg p-8 bg-gray-50">
-              <img 
-                src={productImages[activeImage]} 
-                alt="Nitrous oxide cracker antifreeze rubber bottle" 
-                className="mx-auto w-full max-h-96 object-contain"
-              />
-            </div>
+    <div className="container mx-auto px-4 py-12">
+      {/* Breadcrumb */}
+      <nav className="mb-8">
+        <ol className="flex text-sm">
+          <li className="text-gray-500">
+            <Link to="/" className="hover:text-red-500">Home</Link>
+            <span className="mx-2">/</span>
+          </li>
+          <li className="text-gray-500">
+            <Link to={`/category/${product.category}`} className="hover:text-red-500">
+              {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
+            </Link>
+            <span className="mx-2">/</span>
+          </li>
+          <li className="text-gray-800 font-medium">{product.title}</li>
+        </ol>
+      </nav>
+      
+      {/* Product Detail */}
+      <div className="flex flex-col lg:flex-row gap-10 mb-16">
+        {/* Product Images */}
+        <div className="lg:w-1/2">
+          <div className="bg-gray-100 rounded-lg overflow-hidden mb-4">
+            <img 
+              src={product.image} 
+              alt={product.title}
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="grid grid-cols-4 gap-4">
+            {[...Array(4)].map((_, index) => (
+              <div 
+                key={index} 
+                className={`bg-gray-100 rounded-lg overflow-hidden cursor-pointer border-2 ${index === 0 ? 'border-red-500' : 'border-transparent'}`}
+              >
+                <img 
+                  src={product.image} 
+                  alt={`${product.title} thumbnail ${index+1}`}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* Product Information Section */}
-        <div className="w-full md:w-1/2">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Nitrous oxide cracker antifreeze rubber bottle</h1>
+        
+        {/* Product Info */}
+        <div className="lg:w-1/2">
+          <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
           
-          {/* Rating */}
+          {/* Ratings */}
           <div className="flex items-center mb-4">
-            <div className="flex text-yellow-400">
-              <span>★</span>
-              <span>★</span>
-              <span>★</span>
-              <span>★</span>
-              <span className="text-gray-300">★</span>
+            <div className="flex">
+              {[...Array(5)].map((_, i) => (
+                <Star 
+                  key={i} 
+                  size={18} 
+                  className={i < product.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} 
+                />
+              ))}
             </div>
-            <span className="ml-2 text-gray-600">4.5/5</span>
+            <span className="ml-2 text-gray-600">(24 reviews)</span>
           </div>
           
           {/* Price */}
-          <div className="flex items-center mb-6">
-            <span className="text-2xl font-bold mr-3">$260</span>
-            <span className="text-xl text-gray-400 line-through mr-3">$300</span>
-            <span className="bg-red-100 text-red-700 px-2 py-1 rounded-md text-sm font-medium">-40%</span>
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-2xl font-bold">${product.price.toFixed(2)}</span>
+            {product.oldPrice && (
+              <span className="text-gray-500 line-through">${product.oldPrice.toFixed(2)}</span>
+            )}
+            {product.oldPrice && (
+              <span className="bg-red-100 text-red-500 text-sm px-2 py-1 rounded">
+                {Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)}% OFF
+              </span>
+            )}
           </div>
           
-          {/* Description */}
-          <p className="text-gray-600 mb-8">
-            A very nice feature is that this cracker can be used for a long time and continuously. This can of course be a great advantage at a party or party where nitrous oxide is used and consumed intensively.
+          {/* Short Description */}
+          <p className="text-gray-600 mb-6">
+            {product.description || 'High-quality gaming peripheral designed for professional gamers and enthusiasts. Features premium materials, ergonomic design, and advanced technology for superior performance.'}
           </p>
           
-          {/* Weight Selection */}
+          {/* Quantity */}
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Select Weight</h3>
-            <div className="flex flex-wrap gap-2">
-              {['Heavy', 'Light', 'Medium', 'Extra Heavy'].map((weight) => (
-                <button
-                  key={weight}
-                  className={`px-4 py-2 rounded-full text-sm ${
-                    selectedWeight === weight 
-                      ? 'bg-black text-white' 
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                  }`}
-                  onClick={() => setSelectedWeight(weight)}
-                >
-                  {weight}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          {/* Size Selection */}
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Choose Size</h3>
-            <div className="flex flex-wrap gap-2">
-              {['12', '14', '15', '16'].map((size) => (
-                <button
-                  key={size}
-                  className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    selectedSize === size 
-                      ? 'bg-black text-white' 
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                  }`}
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          {/* Flavor Selection */}
-          <div className="mb-8">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Flavors</h3>
-            <div className="flex flex-wrap gap-2">
-              {['Combustible', 'Butane', 'Hydrogen'].map((flavor) => (
-                <button
-                  key={flavor}
-                  className={`px-4 py-2 rounded-full text-sm ${
-                    selectedFlavor === flavor 
-                      ? 'bg-black text-white' 
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                  }`}
-                  onClick={() => setSelectedFlavor(flavor)}
-                >
-                  {flavor}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          {/* Quantity and Add to Cart */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
+            <label className="block text-gray-700 font-medium mb-2">Quantity</label>
+            <div className="flex items-center">
               <button 
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100"
-                onClick={handleDecreaseQuantity}
+                className="w-10 h-10 border border-gray-300 flex items-center justify-center rounded-l"
+                onClick={handleDecrement}
               >
-                −
+                <Minus size={16} />
               </button>
-              <span className="px-4 py-2">{quantity}</span>
+              <input 
+                type="text" 
+                value={quantity} 
+                onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                className="w-16 h-10 border-t border-b border-gray-300 text-center"
+              />
               <button 
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100"
-                onClick={handleIncreaseQuantity}
+                className="w-10 h-10 border border-gray-300 flex items-center justify-center rounded-r"
+                onClick={handleIncrement}
               >
-                +
+                <Plus size={16} />
               </button>
             </div>
-            
-            <button className="flex-1 bg-black text-white py-3 px-6 rounded-full hover:bg-gray-800 transition-colors">
+          </div>
+          
+          {/* Buttons */}
+          <div className="flex items-center gap-4 mb-8">
+            <Button variant="primary" size="large" className="flex-grow">
               Add to Cart
+            </Button>
+            <button className="w-12 h-12 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-50">
+              <Heart size={20} />
+            </button>
+            <button className="w-12 h-12 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-50">
+              <Share2 size={20} />
             </button>
           </div>
           
-          {/* Additional Information */}
-          <div className="mt-8 border-t border-gray-200 pt-6">
-            <div className="flex items-center gap-2 mb-3">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 1.66675L12.575 6.88341L18.3333 7.72508L14.1667 11.7834L15.15 17.5167L10 14.8167L4.85 17.5167L5.83333 11.7834L1.66667 7.72508L7.425 6.88341L10 1.66675Z" fill="#FFC107"/>
-              </svg>
-              <span className="text-gray-700">Free shipping on orders over $50</span>
+          {/* Additional Info */}
+          <div className="border-t border-gray-200 pt-6 space-y-4">
+            <div className="flex items-center">
+              <Truck size={18} className="text-red-500 mr-3" />
+              <span className="text-gray-600">Free shipping on orders over $100</span>
             </div>
-            <div className="flex items-center gap-2 mb-3">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 18.3334C14.6024 18.3334 18.3333 14.6024 18.3333 10.0001C18.3333 5.39771 14.6024 1.66675 10 1.66675C5.39763 1.66675 1.66667 5.39771 1.66667 10.0001C1.66667 14.6024 5.39763 18.3334 10 18.3334Z" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M10 5.83325V9.99992L12.5 12.4999" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span className="text-gray-700">In stock - ships within 24 hours</span>
+            <div className="flex items-center">
+              <RotateCcw size={18} className="text-red-500 mr-3" />
+              <span className="text-gray-600">30-day money-back guarantee</span>
             </div>
-            <div className="flex items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.5 8.33325H2.5" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M17.5 8.33325V15.8333C17.5 16.2753 17.3244 16.6992 17.0118 17.0118C16.6993 17.3243 16.2754 17.4999 15.8333 17.4999H4.16667C3.72464 17.4999 3.30072 17.3243 2.98816 17.0118C2.67559 16.6992 2.5 16.2753 2.5 15.8333V8.33325" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6.66667 8.33325V4.16659C6.66667 3.50354 6.93006 2.86764 7.3989 2.3988C7.86774 1.92997 8.50363 1.66659 9.16667 1.66659H10.8333C11.4964 1.66659 12.1323 1.92997 12.6011 2.3988C13.0699 2.86764 13.3333 3.50354 13.3333 4.16659V8.33325" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span className="text-gray-700">30-day return policy</span>
+            <div className="flex items-center">
+              <Shield size={18} className="text-red-500 mr-3" />
+              <span className="text-gray-600">2-year warranty included</span>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Product Tabs */}
+      <div className="mb-16">
+        <div className="flex border-b border-gray-200 mb-6">
+          <button 
+            className={`py-3 px-6 font-medium ${activeTab === 'description' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-600'}`}
+            onClick={() => setActiveTab('description')}
+          >
+            Description
+          </button>
+          <button 
+            className={`py-3 px-6 font-medium ${activeTab === 'specifications' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-600'}`}
+            onClick={() => setActiveTab('specifications')}
+          >
+            Specifications
+          </button>
+          <button 
+            className={`py-3 px-6 font-medium ${activeTab === 'reviews' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-600'}`}
+            onClick={() => setActiveTab('reviews')}
+          >
+            Reviews (24)
+          </button>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg">
+          {activeTab === 'description' && (
+            <div>
+              <h3 className="text-lg font-medium mb-4">Product Description</h3>
+              <p className="text-gray-600 mb-4">
+                Experience gaming like never before with our premium gaming peripheral. Designed with professional gamers in mind, this product offers exceptional performance, comfort, and durability.
+              </p>
+              <p className="text-gray-600 mb-4">
+                Featuring advanced technology, ergonomic design, and high-quality materials, this product ensures precision and responsiveness during extended gaming sessions. The sleek, modern aesthetic complements any gaming setup.
+              </p>
+              <p className="text-gray-600">
+                Whether you're a competitive gamer or casual enthusiast, this product will elevate your gaming experience to new heights.
+              </p>
+            </div>
+          )}
+          
+          {activeTab === 'specifications' && (
+            <div>
+              <h3 className="text-lg font-medium mb-4">Technical Specifications</h3>
+              <table className="w-full text-left">
+                <tbody>
+                  <tr className="border-b border-gray-200">
+                    <th className="py-3 text-gray-600 w-1/3">Connectivity</th>
+                    <td className="py-3 text-gray-800">Wireless & Wired</td>
+                  </tr>
+                  <tr className="border-b border-gray-200">
+                    <th className="py-3 text-gray-600 w-1/3">Battery Life</th>
+                    <td className="py-3 text-gray-800">Up to 40 hours</td>
+                  </tr>
+                  <tr className="border-b border-gray-200">
+                    <th className="py-3 text-gray-600 w-1/3">Compatibility</th>
+                    <td className="py-3 text-gray-800">PC, Mac, PlayStation, Xbox</td>
+                  </tr>
+                  <tr className="border-b border-gray-200">
+                    <th className="py-3 text-gray-600 w-1/3">Dimensions</th>
+                    <td className="py-3 text-gray-800">15.3 x 10.7 x 4.4 cm</td>
+                  </tr>
+                  <tr>
+                    <th className="py-3 text-gray-600 w-1/3">Weight</th>
+                    <td className="py-3 text-gray-800">280g</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+          
+          {activeTab === 'reviews' && (
+            <div>
+              <h3 className="text-lg font-medium mb-4">Customer Reviews</h3>
+              <div className="mb-6">
+                <div className="flex items-center mb-4">
+                  <div className="flex mr-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        size={18} 
+                        className={i < 4 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} 
+                      />
+                    ))}
+                  </div>
+                  <span className="text-gray-800 font-medium">4.6 out of 5</span>
+                </div>
+                <p className="text-gray-600">Based on 24 reviews</p>
+              </div>
+              
+              {/* Sample Review */}
+              <div className="border-t border-gray-200 pt-6 pb-6">
+                <div className="flex justify-between mb-2">
+                  <h4 className="font-medium">John D.</h4>
+                  <span className="text-gray-500 text-sm">2 weeks ago</span>
+                </div>
+                <div className="flex mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star 
+                      key={i} 
+                      size={16} 
+                      className={i < 5 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} 
+                    />
+                  ))}
+                </div>
+                <p className="text-gray-600">
+                  Absolutely love this product! The build quality is exceptional and the performance exceeds my expectations. Definitely worth the investment for serious gamers.
+                </p>
+              </div>
+              
+              <div className="text-center mt-6">
+                <Button variant="outline">Write a Review</Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* Related Products */}
+      <div>
+        <h2 className="text-2xl font-bold mb-6">Related Products</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {relatedProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default ProductDetails;

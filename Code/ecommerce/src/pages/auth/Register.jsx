@@ -1,34 +1,41 @@
 import { useState } from 'react';
 import { Eye } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import {registerUser} from '../../api/auth/write'; 
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
-  
+  const [ischecked, setChecked] = useState(false);
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: '',
+    username: '',
+    password: ''
+  });
+  const handleChange =  (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+  const registerForm = async (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    if (!ischecked) {
+      alert('Please agree to the terms and conditions');
+      return;
+    }
+    console.log('Form submitted:', formData);
+    result = await registerUser(formData);
+    if (result) {
+      alert('Registration successful!');
+      navigate('/login');
+    } else{
+      alert('Registration failed! Please try again.');
+    }
+
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Header with Logo and Language Selector */}
-      {/* <header className="w-full flex justify-between items-center p-4">
-        <div className="pl-4">
-          <svg width="40" height="40" viewBox="0 0 100 100" className="text-black">
-            <path fill="currentColor" d="M89.2,42.8c-1.7-2.3-5.4-2.7-7.9-0.8c-0.5,0.4-0.9,0.9-1.3,1.5c-1.1-1.2-2.5-2-4.1-2.4 c-2.3-0.5-4.9,0-6.5,1.9c-0.4-3.1-2.9-5.8-6.3-5.8c-1.5,0-3,0.6-4.2,1.5c-1.4-4.3-7.2-5.8-11-2.7c-1.7-1.9-4.1-3-6.6-3 c-5,0-9,4-9,9c0,0.3,0,0.6,0.1,0.9c-4,0.8-7,4.3-7,8.5c0,4.7,3.8,8.5,8.5,8.5h47c4.7,0,8.5-3.8,8.5-8.5 C91,46.7,90.4,44.5,89.2,42.8z"/>
-            <path fill="black" d="M41.7,71.8c-2.6,0-4.7-2.1-4.7-4.7c0-2.6,2.1-4.7,4.7-4.7s4.7,2.1,4.7,4.7C46.4,69.7,44.3,71.8,41.7,71.8z"/>
-          </svg>
-        </div>
-        <div className="flex items-center pr-4">
-          <div className="flex items-center border border-gray-300 rounded-md px-2 py-1">
-            <svg className="w-5 h-5 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 10h.01M15 10h.01M12 14v-4" />
-            </svg>
-            <span className="ml-1 text-teal-600 font-medium">English</span>
-            <svg className="w-4 h-4 ml-1 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-        </div>
-      </header> */}
-
-      {/* Main Content */}
       <main className="flex-grow flex justify-center items-center py-8">
         <div className="w-full max-w-md px-6">
           <div className="bg-white rounded-lg p-8 border border-gray-200">
@@ -36,10 +43,10 @@ export default function Register() {
             
             <div className="mb-6 text-center">
               <span className="text-gray-800">Already have an account? </span>
-              <a href="#" className="text-teal-600 hover:underline">Log in</a>
+              <Link to="/login" className="text-teal-600 hover:underline">Log in</Link>
             </div>
             
-            <form>
+            <form onSubmit={registerForm}>
               <div className="mb-4">
                 <label htmlFor="email" className="block text-gray-800 mb-2">Email</label>
                 <input
@@ -47,6 +54,10 @@ export default function Register() {
                   id="email"
                   className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   placeholder="email@example.com"
+                  name='email'
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
                 />
               </div>
               
@@ -57,12 +68,16 @@ export default function Register() {
                   id="username"
                   className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   placeholder="Choose a username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  name='username'
+                  required
                 />
               </div>
               
               <div className="mb-4 relative">
                 <div className="flex justify-between mb-2">
-                  <label htmlFor="password" className="block text-gray-800">Password</label>
+                  <label htmlFor="password" className="block text-gray-800"> Password</label>
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
@@ -77,13 +92,16 @@ export default function Register() {
                   id="password"
                   className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   placeholder="Create a password"
+                  name = 'password' 
+                  value = {FormData.password}
+                  onChange = {handleChange} required
                 />
                 <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters with numbers and letters</p>
               </div>
               
               <div className="mb-6">
                 <label className="flex items-start">
-                  <input type="checkbox" className="h-5 w-5 border border-gray-300 rounded mt-1" />
+                  <input type="checkbox" className="h-5 w-5 border border-gray-300 rounded mt-1" onClick={()=> setChecked(!ischecked)} />
                   <span className="ml-2 text-sm text-gray-800">
                     I agree to the <a href="#" className="text-teal-600 hover:underline">Terms of Service</a> and 
                     <a href="#" className="text-teal-600 hover:underline"> Privacy Policy</a>, and I consent to receiving updates from Mailchimp.

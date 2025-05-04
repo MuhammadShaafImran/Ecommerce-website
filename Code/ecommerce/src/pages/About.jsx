@@ -1,79 +1,102 @@
-import { ArrowRight} from 'lucide-react';
+import { ArrowRight, Trophy, Users, Gamepad, HeadphonesIcon, Clock, Award } from 'lucide-react';
 
 const About = () => {
     return (
-        <div className="w-full bg-white text-gray-900">
-            {/* About Us Section */}
-            <section className="py-16 px-4 md:px-8">
-                <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                            <span className="text-blue-400">About</span> Game Empire
-                        </h2>
-                        <div className="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
-                        <p className="text-gray-400 max-w-3xl mx-auto">
-                            Experience the ultimate gaming destination where passion meets technology
+        <div className="text-gray-900">
+            {/* Hero Section */}
+            <section className="relative py-20 overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 relative">
+                    <div className="text-center mb-16">
+                        <h1 className="text-4xl md:text-5xl font-bold mb-6">
+                            <span className="text-gray-900">About</span>
+                            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"> Game Empire</span>
+                        </h1>
+                        <p className="text-gray-600 text-lg max-w-3xl mx-auto">
+                            Your premier destination for premium gaming gear and accessories. 
+                            We're passionate about delivering exceptional gaming experiences.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                         {/* Our Story */}
-                        <div className="bg-gray-800 p-6 rounded-lg border-l-4 border-blue-500 hover:transform hover:scale-105 transition-all duration-300">
-                            <h3 className="text-xl font-bold text-white mb-4">Our Story</h3>
-                            <p className="text-gray-400">
-                                Founded in 2018 by a team of passionate gamers, Game Empire was built with a simple mission: to create a community where gamers can discover, discuss, and enjoy the best gaming experiences.
+                        <div className="group bg-gray-100 rounded-xl p-8 border border-gray-300 hover:border-blue-500 transition-all duration-300">
+                            <div className="p-3 bg-blue-100 rounded-lg w-fit mb-6">
+                                <Trophy className="w-6 h-6 text-blue-400" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">Our Story</h3>
+                            <p className="text-gray-600 leading-relaxed mb-6">
+                                Founded by passionate gamers, Game Empire was built to create 
+                                a community where gaming enthusiasts can discover and experience 
+                                the best in gaming technology.
                             </p>
-                            <button className="flex items-center mt-4 text-blue-400 hover:text-blue-300 transition-colors">
-                                Learn more <ArrowRight size={16} className="ml-2" />
+                            <button className="group inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
+                                Learn more 
+                                <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
 
                         {/* Our Vision */}
-                        <div className="bg-gray-800 p-6 rounded-lg border-l-4 border-purple-500 hover:transform hover:scale-105 transition-all duration-300">
-                            <h3 className="text-xl font-bold text-white mb-4">Our Vision</h3>
-                            <p className="text-gray-400">
-                                We aim to revolutionize the gaming industry by providing an accessible platform that connects players with exceptional games across all genres, platforms, and preferences.
+                        <div className="group bg-gray-100 rounded-xl p-8 border border-gray-300 hover:border-purple-500 transition-all duration-300">
+                            <div className="p-3 bg-purple-100 rounded-lg w-fit mb-6">
+                                <Users className="w-6 h-6 text-purple-400" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">Our Vision</h3>
+                            <p className="text-gray-600 leading-relaxed mb-6">
+                                We aim to revolutionize the gaming industry by providing an 
+                                accessible platform that connects players with exceptional 
+                                gaming gear across all preferences.
                             </p>
-                            <button className="flex items-center mt-4 text-blue-400 hover:text-blue-300 transition-colors">
-                                Learn more <ArrowRight size={16} className="ml-2" />
+                            <button className="group inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
+                                Learn more 
+                                <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
 
                         {/* Why Choose Us */}
-                        <div className="bg-gray-800 p-6 rounded-lg border-l-4 border-green-500 hover:transform hover:scale-105 transition-all duration-300">
-                            <h3 className="text-xl font-bold text-white mb-4">Why Choose Us</h3>
-                            <p className="text-gray-400">
-                                Exclusive deals, a curated selection of top titles, early access to upcoming releases, and a dedicated support team available 24/7 to enhance your gaming journey.
+                        <div className="group bg-gray-100 rounded-xl p-8 border border-gray-300 hover:border-pink-500 transition-all duration-300">
+                            <div className="p-3 bg-pink-100 rounded-lg w-fit mb-6">
+                                <Award className="w-6 h-6 text-pink-400" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">Why Choose Us</h3>
+                            <p className="text-gray-600 leading-relaxed mb-6">
+                                Exclusive deals, curated selection of premium gear, early access 
+                                to upcoming releases, and dedicated 24/7 support to enhance 
+                                your gaming journey.
                             </p>
-                            <button className="flex items-center mt-4 text-blue-400 hover:text-blue-300 transition-colors">
-                                Learn more <ArrowRight size={16} className="ml-2" />
+                            <button className="group inline-flex items-center text-pink-400 hover:text-pink-300 transition-colors">
+                                Learn more 
+                                <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
-                        <div className="text-center">
-                            <h4 className="text-4xl font-bold text-blue-400 mb-2">500+</h4>
-                            <p className="text-gray-400">Games Available</p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        <div className="bg-gray-50 rounded-xl p-6 text-center border border-gray-200 hover:border-blue-500 transition-all duration-300">
+                            <Gamepad className="w-8 h-8 text-blue-400 mx-auto mb-4" />
+                            <h4 className="text-3xl font-bold text-gray-900 mb-2">500+</h4>
+                            <p className="text-gray-600">Products Available</p>
                         </div>
-                        <div className="text-center">
-                            <h4 className="text-4xl font-bold text-blue-400 mb-2">50K+</h4>
-                            <p className="text-gray-400">Active Players</p>
+                        <div className="bg-gray-50 rounded-xl p-6 text-center border border-gray-200 hover:border-purple-500 transition-all duration-300">
+                            <Users className="w-8 h-8 text-purple-400 mx-auto mb-4" />
+                            <h4 className="text-3xl font-bold text-gray-900 mb-2">50K+</h4>
+                            <p className="text-gray-600">Happy Customers</p>
                         </div>
-                        <div className="text-center">
-                            <h4 className="text-4xl font-bold text-blue-400 mb-2">10+</h4>
-                            <p className="text-gray-400">Gaming Partners</p>
+                        <div className="bg-gray-50 rounded-xl p-6 text-center border border-gray-200 hover:border-pink-500 transition-all duration-300">
+                            <HeadphonesIcon className="w-8 h-8 text-pink-400 mx-auto mb-4" />
+                            <h4 className="text-3xl font-bold text-gray-900 mb-2">10+</h4>
+                            <p className="text-gray-600">Gaming Partners</p>
                         </div>
-                        <div className="text-center">
-                            <h4 className="text-4xl font-bold text-blue-400 mb-2">24/7</h4>
-                            <p className="text-gray-400">Customer Support</p>
+                        <div className="bg-gray-50 rounded-xl p-6 text-center border border-gray-200 hover:border-indigo-500 transition-all duration-300">
+                            <Clock className="w-8 h-8 text-indigo-400 mx-auto mb-4" />
+                            <h4 className="text-3xl font-bold text-gray-900 mb-2">24/7</h4>
+                            <p className="text-gray-600">Customer Support</p>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
-    )
-}
+    );
+};
 
 export default About;

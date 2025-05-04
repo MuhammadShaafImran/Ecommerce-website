@@ -27,18 +27,16 @@ const Contact = () => {
       message: ''
     });
   };
-
-  {/* Contact Us Section */}
   return (
-    <div className="w-full text-gray-900">
-      <section className="py-16 px-4 md:px-8 bg">
-        <div className="max-w-6xl mx-auto">
+    <div className="text-gray-900">
+      <section className="relative py-20 px-4 overflow-hidden">
+        <div className="max-w-7xl mx-auto relative">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="text-blue-400">Contact</span> Us
-            </h2>
-            <div className="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
-            <p className="text-gray-400 max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="text-gray-900">Contact</span>
+              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"> Us</span>
+            </h1>
+            <p className="text-gray-400 text-lg max-w-3xl mx-auto">
               Have questions or need support? Our team is ready to help you with anything gaming related
             </p>
           </div>
@@ -46,56 +44,56 @@ const Contact = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Contact Information */}
             <div className="lg:col-span-1">
-              <div className="bg-gray-900 p-6 rounded-lg h-full">
-                <h3 className="text-2xl font-bold text-white mb-6">Get in Touch</h3>
+              <div className="group bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300">
+                <h3 className="text-2xl font-bold text-gray-900 mb-8">Get in Touch</h3>
                 
-                <div className="space-y-6">
-                  <div className="flex items-start">
-                    <div className="bg-blue-500/20 p-3 rounded-full mr-4">
+                <div className="space-y-8">
+                  <div className="flex items-start group/item">
+                    <div className="p-3 bg-blue-600/20 rounded-lg mr-4 group-hover/item:bg-blue-600/30 transition-colors">
                       <MapPin className="text-blue-400" size={20} />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white">Our Location</h4>
-                      <p className="text-gray-400 mt-1">123 Gaming Street, Digital City, 10001</p>
+                      <h4 className="font-semibold text-gray-900 mb-1">Our Location</h4>
+                      <p className="text-gray-400">123 Gaming Street, Digital City, 10001</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-start">
-                    <div className="bg-blue-500/20 p-3 rounded-full mr-4">
-                      <Phone className="text-blue-400" size={20} />
+                  <div className="flex items-start group/item">
+                    <div className="p-3 bg-purple-600/20 rounded-lg mr-4 group-hover/item:bg-purple-600/30 transition-colors">
+                      <Phone className="text-purple-400" size={20} />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white">Phone Number</h4>
-                      <p className="text-gray-400 mt-1">+1 (555) 123-4567</p>
+                      <h4 className="font-semibold text-gray-900 mb-1">Phone Number</h4>
+                      <p className="text-gray-400">+1 (555) 123-4567</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-start">
-                    <div className="bg-blue-500/20 p-3 rounded-full mr-4">
-                      <Mail className="text-blue-400" size={20} />
+                  <div className="flex items-start group/item">
+                    <div className="p-3 bg-pink-600/20 rounded-lg mr-4 group-hover/item:bg-pink-600/30 transition-colors">
+                      <Mail className="text-pink-400" size={20} />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white">Email Address</h4>
-                      <p className="text-gray-400 mt-1">support@gameempire.com</p>
+                      <h4 className="font-semibold text-gray-900 mb-1">Email Address</h4>
+                      <p className="text-gray-400">support@gameempire.com</p>
                     </div>
                   </div>
                 </div>
                 
                 {/* Social Media Links */}
-                <div className="mt-8">
-                  <h4 className="font-semibold text-white mb-4">Follow Us</h4>
+                <div className="mt-12">
+                  <h4 className="font-semibold text-gray-900 mb-4">Follow Us</h4>
                   <div className="flex space-x-4">
-                    <a href="#" className="bg-gray-700 p-3 rounded-full hover:bg-blue-600 transition-colors">
-                      <Twitter size={18} className="text-white" />
+                    <a href="#" className="bg-gray-700/50 p-3 rounded-lg hover:bg-blue-600/20 hover:text-blue-400 transition-all">
+                      <Twitter size={18} className="text-current" />
                     </a>
-                    <a href="#" className="bg-gray-700 p-3 rounded-full hover:bg-purple-600 transition-colors">
-                      <Twitch size={18} className="text-white" />
+                    <a href="#" className="bg-gray-700/50 p-3 rounded-lg hover:bg-purple-600/20 hover:text-purple-400 transition-all">
+                      <Twitch size={18} className="text-current" />
                     </a>
-                    <a href="#" className="bg-gray-700 p-3 rounded-full hover:bg-red-600 transition-colors">
-                      <Youtube size={18} className="text-white" />
+                    <a href="#" className="bg-gray-700/50 p-3 rounded-lg hover:bg-red-600/20 hover:text-red-400 transition-all">
+                      <Youtube size={18} className="text-current" />
                     </a>
-                    <a href="#" className="bg-gray-700 p-3 rounded-full hover:bg-gray-900 transition-colors">
-                      <Github size={18} className="text-white" />
+                    <a href="#" className="bg-gray-700/50 p-3 rounded-lg hover:bg-gray-600/20 hover:text-gray-100 transition-all">
+                      <Github size={18} className="text-current" />
                     </a>
                   </div>
                 </div>
@@ -104,26 +102,26 @@ const Contact = () => {
             
             {/* Contact Form */}
             <div className="lg:col-span-2">
-              <div className="bg-gray-900 p-6 rounded-lg">
-                <h3 className="text-2xl font-bold text-white mb-6">Send Us a Message</h3>
+              <div className="group bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300">
+                <h3 className="text-2xl font-bold text-gray-900 mb-8">Send Us a Message</h3>
                 
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-gray-400 mb-2 text-sm">Full Name</label>
+                    <div className="group/input">
+                      <label className="block text-gray-400 mb-2 text-sm font-medium">Full Name</label>
                       <input 
                         type="text" 
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full bg-gray-900/50 border border-gray-700/50 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent group-hover/input:border-gray-600/50 transition-colors"
                         placeholder="John Doe"
                         value={contactForm.name}
                         onChange={(e) => handleInputChange('name', e.target.value)}
                       />
                     </div>
-                    <div>
-                      <label className="block text-gray-400 mb-2 text-sm">Email Address</label>
+                    <div className="group/input">
+                      <label className="block text-gray-400 mb-2 text-sm font-medium">Email Address</label>
                       <input 
                         type="email" 
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full bg-gray-900/50 border border-gray-700/50 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent group-hover/input:border-gray-600/50 transition-colors"
                         placeholder="john@example.com"
                         value={contactForm.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
@@ -131,22 +129,22 @@ const Contact = () => {
                     </div>
                   </div>
                   
-                  <div>
-                    <label className="block text-gray-400 mb-2 text-sm">Subject</label>
+                  <div className="group/input">
+                    <label className="block text-gray-400 mb-2 text-sm font-medium">Subject</label>
                     <input 
                       type="text" 
-                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full bg-gray-900/50 border border-gray-700/50 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent group-hover/input:border-gray-600/50 transition-colors"
                       placeholder="How can we help?"
                       value={contactForm.subject}
                       onChange={(e) => handleInputChange('subject', e.target.value)}
                     />
                   </div>
                   
-                  <div>
-                    <label className="block text-gray-400 mb-2 text-sm">Message</label>
+                  <div className="group/input">
+                    <label className="block text-gray-400 mb-2 text-sm font-medium">Message</label>
                     <textarea 
                       rows="5" 
-                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full bg-gray-900/50 border border-gray-700/50 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent group-hover/input:border-gray-600/50 transition-colors resize-none"
                       placeholder="Tell us more about your inquiry..."
                       value={contactForm.message}
                       onChange={(e) => handleInputChange('message', e.target.value)}
@@ -156,10 +154,10 @@ const Contact = () => {
                   <div className="pt-2">
                     <button 
                       onClick={handleSendMessage}
-                      className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg flex items-center transition-colors"
+                      className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-medium py-3 px-6 rounded-lg flex items-center transition-all duration-300"
                     >
                       Send Message
-                      <Send size={16} className="ml-2" />
+                      <Send size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform" />
                     </button>
                   </div>
                 </div>
