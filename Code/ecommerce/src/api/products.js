@@ -119,7 +119,7 @@ export const getProductById = async (id) => {
         fullName: review.users.full_name
       }
     })) || [],
-    avgRating,
+    averageRating: avgRating,
     reviewCount: reviews.length,
     createdAt: data.created_at
   };

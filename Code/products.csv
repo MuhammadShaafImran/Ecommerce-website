@@ -9,3 +9,53 @@ name,description,price,category_id
 "Razer DeathAdder","High precision gaming mouse",69.99,4
 "Xbox Elite Controller","Premium customizable Xbox controller",149.99,1
 "Corsair Keyboard","Mechanical keyboard with wrist rest",109.99,2
+
+
+product_id,productimage_url,alt_text
+1,/media/controller-2.jpg,Xbox Wireless Controller Image
+2,/media/controller-3.jpg,PlayStation Controller Image
+3,/media/stations-category.jpg,Keyboard Category Image
+4,/media/controller-1.jpg,Gaming Keyboard Image
+5,/media/nintendo.jpg,Nintendo Switch Image
+6,/media/Sony-PlayStation-PS5-DualSense-Wireless-Controller.png,PlayStation 5 Controller Image
+7,/media/controller-3.jpg,Logitech Mouse Image
+8,/media/controller-2.jpg,Razer DeathAdder Mouse Image
+9,/media/controller-1.jpg,Xbox Elite Controller Image
+10,/media/stations-category.jpg,Corsair Keyboard Image
+
+
+
+user_id,product_id,rating,comment
+3,1,5,"Perfect ergonomics for long gaming sessions"
+5,1,4,"Great controller but battery life could be better"
+2,2,5,"Best PS4 controller Ive ever used"
+4,2,3,"Analog sticks started drifting after 2 months"
+1,3,4,"Awesome clicky sound but LEDs stopped working"
+5,3,5,"Build quality exceeds price point"
+3,4,2,"Macro keys are hard to configure"
+2,4,5,"Worth every penny for MMO gamers"
+4,5,5,"Perfect handheld console for travel"
+11,5,3,"First-party games are too expensive"
+15,6,5,"Next-gen performance is mindblowing"
+12,6,4,"Console is bigger than I expected"
+13,7,4,"Reliable wireless connection"
+14,7,1,"Scroll wheel broke within a week"
+11,8,5,"Best FPS mouse Ive ever used"
+15,8,4,"Perfect shape but RGB software is buggy"
+12,9,5,"Customizable paddles are game-changers"
+14,9,2,"Not worth the premium price tag"
+13,10,4,"Wrist rest makes typing comfortable"
+21,10,3,"Software causes occasional lag spikes"
+
+
+product_id,connectivity,batteryLife,compatibility,dimensions,weight
+1,"Wireless, Bluetooth","40 hours","Xbox One, Windows 10","6 x 4 x 2 inches","0.25 lbs"
+2,"Wireless, Bluetooth","30 hours","PlayStation 4, PC","6 x 4 x 2 inches","0.28 lbs"
+3,"Wired USB","N/A","Windows, Mac","17 x 5 x 1.5 inches","1.5 lbs"
+4,"Wired USB","N/A","Windows, Mac","18 x 6 x 1.5 inches","1.6 lbs"
+5,"Wireless, Bluetooth, Wi-Fi","9 hours","Nintendo Switch","9.4 x 4 x 0.55 inches","0.88 lbs"
+6,"Wireless, Bluetooth, Wi-Fi","10 hours","PlayStation 5","15.4 x 10.2 x 4.1 inches","9.9 lbs"
+7,"Wireless, USB","20 hours","Windows, Mac","4.5 x 2.5 x 1.5 inches","0.15 lbs"
+8,"Wired USB","N/A","Windows, Mac","5 x 2.5 x 1.5 inches","0.2 lbs"
+9,"Wireless, Bluetooth","50 hours","Xbox One, Windows 10","6 x 4 x 2 inches","0.3 lbs"
+10,"Wired USB","N/A","Windows, Mac","17 x 5 x 1.5 inches","1.7 lbs"

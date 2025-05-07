@@ -32,28 +32,39 @@ import React from 'react';
 import HeroBanner from '../components/home/HeroBanner';
 import CategorySection from '../components/home/CategorySection';
 import FeaturedProducts from '../components/home/FeaturedProducts';
-// import ProductShowcase from '../components/home/ProductShowcase';
+import ProductShowcase from '../components/home/ProductShowcase';
 import WeeklyDeals from '../components/home/WeeklyDeals';
 import Testimonials from '../components/home/Testimonials';
 import LatestNews from '../components/home/LatestNews';
 import FeatureIcons from '../components/home/FeatureIcons';
-// import { products } from '../api/products';
+import { getProductById } from '../api/products';
 
 const Home = () => {
   // Get featured showcase products
-  // const showcaseProducts = [
-  //   products.find(p => p.id === 'headphones1'),
-  //   products.find(p => p.id === 'keyboard1')
-  // ];
+  // const [showcaseProducts, setShowcaseProducts] = React.useState([]);
+  // const [error, setError] = React.useState(null);
+
+  // React.useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     const { data, error } = await getProductById(1);
+  //     if (error) {
+  //       setError(error);
+  //     } else {
+  //       console.log("Fetched showcase products:", data);
+  //       setShowcaseProducts(data);
+  //     }
+  //   };
+  //   fetchProducts();
+  // }, []);
 
   return (
     <div>
       <HeroBanner />
-      <CategorySection />
-      <FeaturedProducts />
-      {/* <ProductShowcase product={{...showcaseProducts[0], imagePosition: 'right'}} /> */}
-      <WeeklyDeals />
-      {/* <ProductShowcase product={{...showcaseProducts[1], imagePosition: 'left'}} /> */}
+      {/* <CategorySection /> */}
+      {/* <FeaturedProducts /> */}
+      {/* <ProductShowcase product={showcaseProducts} imagePosition='right' /> */}
+      {/* <WeeklyDeals /> */}
+      {/* <ProductShowcase product={showcaseProducts} imagePosition='left' /> */}
       <Testimonials />
       <LatestNews />
       <FeatureIcons />

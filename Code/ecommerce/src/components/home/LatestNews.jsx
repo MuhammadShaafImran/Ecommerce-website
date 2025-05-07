@@ -20,7 +20,7 @@ const LatestNews = () => {
       id: 2,
       title: "Esports Tournament Partnership Announced",
       excerpt: "We're excited to announce our partnership with major esports organizations for upcoming tournaments.",
-      image: "../../media/controller-2.jpg",
+      image: "../../media/controller-2.png",
       date: "2025-04-28",
       category: "Events"
     },
@@ -33,6 +33,8 @@ const LatestNews = () => {
       category: "Guides"
     }
   ];
+
+  
 
   return (
     <section className="py-12">

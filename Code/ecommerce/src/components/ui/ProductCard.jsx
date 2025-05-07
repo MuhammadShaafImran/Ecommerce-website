@@ -3,23 +3,27 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, ShoppingCart } from 'lucide-react';
 
-const ProductCard = ({ product, horizontal = false }) => {
-  const { id, title, price, image, rating, oldPrice } = product;
+const calculateOldPrice = (price) => {
+  return price * (1 + Math.random() * 0.2); // Random old price for demo
+}
 
+const ProductCard = ({ product, horizontal = false }) => {
+  const oldPrice = calculateOldPrice(product.price);
+  const image = product.images && product.images.length > 0 ? product.images[0] : null;
   // Calculate discount percentage if oldPrice exists
   const discountPercentage = oldPrice 
-    ? Math.round(((oldPrice - price) / oldPrice) * 100) 
+    ? Math.round(((oldPrice - product.price) / oldPrice) * 100) 
     : null;
 
   return (
-    <div className={`group ${horizontal ? 'flex gap-4' : ''}`}>
+    <div className={`group flex-shrink-0 w-72 mx-6 ${horizontal ? 'flex gap-4' : ''}`}>
       <Link 
-        to={`/product/${id}`} 
-        className={`block relative rounded overflow-hidden ${horizontal ? 'w-1/3' : 'mb-3'}`}
+        to={`/product/${product.id}`} 
+        className={`block relative rounded overflow-hidden h-64 ${horizontal ? 'w-1/3' : 'mb-3'}`}
       >
         <img 
-          src={image} 
-          alt={title} 
+          src={image ? image.url : '/placeholder.jpg'} 
+          alt={image ? image.alt_text : 'Product Image'} 
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
         />
         {discountPercentage && (
@@ -30,9 +34,9 @@ const ProductCard = ({ product, horizontal = false }) => {
       </Link>
       
       <div className={horizontal ? 'w-2/3' : ''}>
-        <Link to={`/product/${id}`} className="block">
+        <Link to={`/product/${product.id}`} className="block">
           <h3 className="font-medium text-gray-800 hover:text-red-500 transition-colors">
-            {title}
+            {product.name}
           </h3>
         </Link>
         
@@ -41,14 +45,14 @@ const ProductCard = ({ product, horizontal = false }) => {
             <Star 
               key={i} 
               size={14} 
-              className={i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} 
+              className={i < product.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} 
             />
           ))}
         </div>
         
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-800">${price.toFixed(2)}</span>
+            <span className="font-bold text-gray-800">${product.price.toFixed(2)}</span>
             {oldPrice && (
               <span className="text-gray-500 line-through text-sm">${oldPrice.toFixed(2)}</span>
             )}

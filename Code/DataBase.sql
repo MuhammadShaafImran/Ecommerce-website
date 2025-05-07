@@ -113,3 +113,14 @@ CREATE TABLE reviews (
   comment TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+CREATE TABLE specifications (
+    spec_id serial PRIMARY KEY,
+    product_id integer,
+    connectivity VARCHAR(255),
+    batteryLife VARCHAR(255),
+    compatibility VARCHAR(255),
+    dimensions VARCHAR(255),
+    weight VARCHAR(255),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);

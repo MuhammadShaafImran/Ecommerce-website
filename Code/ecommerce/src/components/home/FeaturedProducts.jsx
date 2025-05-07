@@ -2,70 +2,69 @@
 import React from 'react';
 import SectionTitle from '../shared/SectionTitle';
 import ProductCard from '../ui/ProductCard';
-// import { products } from '../../api/products';
+import { getProductsSortedByRating } from '../../api/product/read';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const FeaturedProducts = () => {
-  // Hardcoded sample data
-  const featuredProducts = [
-    {
-      id: 1,
-      title: "PlayStation 5 DualSense Controller",
-      price: 69.99,
-      image: "../../media/Sony-PlayStation-PS5-DualSense-Wireless-Controller.png",
-      rating: 5,
-      oldPrice: 79.99,
-    },
-    {
-      id: 2,
-      title: "Razer BlackShark V2 Pro",
-      price: 179.99,
-      image: "../../media/controller-2.jpg",
-      rating: 4,
-      oldPrice: 159.99,
-    },
-    {
-      id: 3,
-      title: "Logitech G Pro X Superlight",
-      price: 149.99,
-      image: "../../media/controller-1.jpg",
-      rating: 5,
-      oldPrice: 109.99,
-    },
-    {
-      id: 4,
-      title: "SteelSeries Apex Pro",
-      price: 199.99,
-      image: "../../media/controller-3.jpg",
-      rating: 4,
-      oldPrice: 179.99,
-    },
-    {
-      id: 5,
-      title: "ASUS ROG Swift PG279QM",
-      price: 849.99,
-      image: "../../media/controller-1.jpg",
-      rating: 5,
-      oldPrice: 779.99,
+
+  const [featuredProducts, setFeaturedProducts] = React.useState([]);
+  const [error, setError] = React.useState(null);
+  const scrollContainerRef = React.useRef(null);
+
+  React.useEffect(() => {
+
+    const fetchProducts = async () => {
+      try {
+        const sortedProducts = await getProductsSortedByRating();
+        console.log(sortedProducts);
+        setFeaturedProducts(sortedProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setError(null);
+      }
     }
-  ];
-  
+    fetchProducts();
+  }, []);
+
+  const scrollLeft = () => {
+    scrollContainerRef.current.scrollBy({
+      left: -300, // adjust scroll amount as needed
+      behavior: 'smooth',
+    });
+  };
+
+  const scrollRight = () => {
+    scrollContainerRef.current.scrollBy({
+      left: 300,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-4">
         <SectionTitle title="Our Products" centered />
         <div className="relative">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div
+            ref={scrollContainerRef}
+            className="flex overflow-x-hidden space-x-4 scrollbar-hide"
+          >
             {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product}/>
             ))}
           </div>
-          
+
           {/* Navigation arrows */}
-          <button className="absolute top-1/2 -left-4 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow items-center justify-center text-gray-700 hidden md:inline-flex">
+          <button
+            onClick={scrollLeft}
+            className="absolute top-1/2 -left-4 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-gray-700 hidden md:flex"
+          >
             <ChevronLeft size={24} />
           </button>
-          <button className="absolute top-1/2 -right-4 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow items-center justify-center text-gray-700 hidden md:inline-flex">
+          <button
+            onClick={scrollRight}
+            className="absolute top-1/2 -right-4 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-gray-700 hidden md:flex"
+          >
             <ChevronRight size={24} />
           </button>
         </div>
@@ -73,5 +72,4 @@ const FeaturedProducts = () => {
     </section>
   );
 };
-
 export default FeaturedProducts;
