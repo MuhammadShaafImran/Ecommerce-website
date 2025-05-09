@@ -10,7 +10,11 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    // Initialize cart from localStorage
+    const savedCart = localStorage.getItem('gameCart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
   const [cartId, setCartId] = useState(null);
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,7 +28,6 @@ export const CartProvider = ({ children }) => {
       }
       setLoading(false);
     };
-    
     getUser();
   }, []);
 
@@ -32,11 +35,6 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const getCart = async () => {
       if (!userId) {
-        // If not logged in, use local storage cart
-        const storedCart = localStorage.getItem('gameCart');
-        if (storedCart) {
-          setCartItems(JSON.parse(storedCart));
-        }
         return;
       }
       
@@ -66,7 +64,7 @@ export const CartProvider = ({ children }) => {
       
       setCartId(cart.id);
       
-      // Get cart items
+      // Get cart items from database
       const { data: items, error: itemsError } = await supabase
         .from('cart_items')
         .select(`
@@ -111,12 +109,10 @@ export const CartProvider = ({ children }) => {
     }
   }, [userId, loading]);
 
-  // Save cart items to localStorage when not logged in
+  // Save cart items to localStorage whenever they change
   useEffect(() => {
-    if (!userId && cartItems.length > 0) {
-      localStorage.setItem('gameCart', JSON.stringify(cartItems));
-    }
-  }, [cartItems, userId]);
+    localStorage.setItem('gameCart', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   // Add item to cart
   const addToCart = async (product, quantity = 1) => {
@@ -220,8 +216,9 @@ export const CartProvider = ({ children }) => {
     }
     
     setCartItems([]);
-    localStorage.removeItem('gameCart');
   };
+
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <CartContext.Provider value={{
@@ -230,7 +227,7 @@ export const CartProvider = ({ children }) => {
       updateQuantity,
       removeFromCart,
       clearCart,
-      cartCount: cartItems.reduce((sum, item) => sum + item.quantity, 0)
+      cartCount
     }}>
       {children}
     </CartContext.Provider>

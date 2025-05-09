@@ -8,7 +8,7 @@ const CategoryCard = ({ category }) => {
   
   return (
     <Link 
-      to={`/category/${id}`}
+      to={`/category/${name}`}
       className="block relative rounded overflow-hidden group"
     >
       <div className="aspect-video bg-gray-100 rounded overflow-hidden">

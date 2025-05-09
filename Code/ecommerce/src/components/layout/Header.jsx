@@ -1,11 +1,13 @@
 // components/layout/Header.jsx
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Navigation from '../shared/Navigation';
 import { ShoppingCart, User, Search, Menu, X } from 'lucide-react';
+import { CartContext } from '../../contexts/CartContext';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { cartCount } = useContext(CartContext);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -30,9 +32,11 @@ const Header = () => {
           </Link>
           <Link to="/cart" className="p-1 relative">
             <ShoppingCart size={20} />
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-              0
-            </span>
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                {cartCount}
+              </span>
+            )}
           </Link>
           
           {/* Mobile menu button */}

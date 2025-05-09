@@ -13,8 +13,8 @@ const Testimonials = () => {
 
     const fetchTestimonials = async () => {
       try {
-        const reviews = await getUsersReviews(); // Fetching reviews for product ID 1
-        console.log(reviews);
+        const reviews = await getUsersReviews();
+        // console.log(reviews);
         setReviews(reviews);
       } catch (error) {
         console.error("Error fetching testimonials:", error);

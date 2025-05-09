@@ -16,7 +16,7 @@ const FeaturedProducts = () => {
     const fetchProducts = async () => {
       try {
         const sortedProducts = await getProductsSortedByRating();
-        console.log(sortedProducts);
+        // console.log('Featured Products:',sortedProducts);
         setFeaturedProducts(sortedProducts);
       } catch (error) {
         console.error("Error fetching products:", error);

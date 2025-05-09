@@ -9,6 +9,7 @@ const Navigation = ({ mobile = false }) => {
     { label: 'Products', path: '/products' },
     { label: 'Shop', path: '/shop' },
     { label: 'Collections', path: '/collections' },
+
   ];
 
   return (

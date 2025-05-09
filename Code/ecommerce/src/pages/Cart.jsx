@@ -1,35 +1,12 @@
 // pages/Cart.jsx
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trash2, Minus, Plus, ArrowRight, ArrowLeft, ShoppingBag } from 'lucide-react';
 import Button from '../components/ui/Button';
+import { CartContext } from '../contexts/CartContext';
 
 const Cart = () => {
-  // Hardcoded sample cart items
-  const [cartItems, setCartItems] = useState([
-    {
-      id: "1",
-      title: "PlayStation 5 DualSense Controller",
-      price: 69.99,
-      quantity: 2,
-      image: "../../media/Sony-PlayStation-PS5-DualSense-Wireless-Controller.png"
-    },
-    {
-      id: "2",
-      title: "Razer BlackShark V2 Pro",
-      price: 179.99,
-      quantity: 1,
-      image: "../../media/test-game.jpg"
-    },
-    {
-      id: "3",
-      title: "Logitech G Pro X Superlight",
-      price: 149.99,
-      quantity: 1,
-      image: "../../media/test-game.jpg"
-    }
-  ]);
-  
+  const { cartItems, updateQuantity, removeFromCart, clearCart } = useContext(CartContext);
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -40,30 +17,24 @@ const Cart = () => {
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 100 ? 0 : 10;
   const total = subtotal + shipping - discount;
-  
+
   const handleQuantityChange = (itemId, newQuantity) => {
     if (newQuantity < 1) return;
-    setCartItems(prevItems => 
-      prevItems.map(item => 
-        item.id === itemId 
-          ? { ...item, quantity: newQuantity }
-          : item
-      )
-    );
+    updateQuantity(itemId, newQuantity);
   };
-  
+
   const handleRemoveItem = (itemId) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== itemId));
+    removeFromCart(itemId);
   };
-  
-  const clearCart = () => {
-    setCartItems([]);
+
+  const handleClearCart = () => {
+    clearCart();
     setDiscount(0);
     setCouponCode('');
     setCouponSuccess('');
     setCouponError('');
   };
-  
+
   const handleApplyCoupon = () => {
     if (!couponCode.trim()) {
       setCouponError('Please enter a coupon code');
@@ -201,7 +172,7 @@ const Cart = () => {
               {couponSuccess && <p className="text-green-500 text-sm mt-2">{couponSuccess}</p>}
             </div>
             <div>
-              <Button variant="outline" onClick={clearCart}>
+              <Button variant="outline" onClick={handleClearCart}>
                 Clear Cart
               </Button>
             </div>
