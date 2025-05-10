@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Star, Minus, Plus, Heart, Share2, Truck, RotateCcw, Shield } from 'lucide-react';
-import { getProductById, getUsersReviewsByProductId, getProductsSortedByRating, getProductSpecificationById } from '../api/product/read';
-import { CartContext } from '../contexts/CartContext';
-import ProductCard from '../components/ui/ProductCard';
+import { getProductById, getUsersReviewsByProductId, getProductsSortedByRating, getProductSpecificationById } from '../../api/product/read';
+import { CartContext } from '../../contexts/CartContext';
+import ProductCard from '../../components/ui/ProductCard';
 
 const ProductDetails = () => {
   const { id } = useParams();

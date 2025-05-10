@@ -1,28 +1,27 @@
-
 // components/shared/Navigation.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Navigation = ({ mobile = false }) => {
-  const navItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Products', path: '/products' },
-    { label: 'Shop', path: '/shop' },
-    { label: 'Collections', path: '/collections' },
-
-  ];
-
+const Navigation = () => {
   return (
-    <nav className={mobile ? 'flex flex-col space-y-4' : 'flex space-x-6'}>
-      {navItems.map((item, index) => (
-        <Link
-          key={index}
-          to={item.path}
-          className="text-gray-700 hover:text-red-500 font-medium transition"
-        >
-          {item.label}
-        </Link>
-      ))}
+    <nav>
+      <ul className="flex space-x-6">
+        <li>
+          <Link to="/" className="text-gray-600 hover:text-red-500">
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link to="/products" className="text-gray-600 hover:text-red-500">
+            Products
+          </Link>
+        </li>
+        <li>
+          <Link to="/collections" className="text-gray-600 hover:text-red-500">
+            Categories
+          </Link>
+        </li>
+      </ul>
     </nav>
   );
 };

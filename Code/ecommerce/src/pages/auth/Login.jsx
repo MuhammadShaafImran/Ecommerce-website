@@ -3,10 +3,12 @@ import { Eye } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { validateLogin} from '../../utils/authenticate';
 import { getUserByEmailOrUsername } from '../../api/auth/read';
+import { useAuth } from '../../contexts/AuthContext';
 
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [ischecked, setChecked] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,16 +21,26 @@ export default function Login() {
   }
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log('Login User:', formData);
     try {
-      const userID = await getUserByEmailOrUsername(formData);
-      console.log('UserID:', userID);
+      const userData = await getUserByEmailOrUsername(formData);
       
-      if (userID) {
-        alert('Login successful!');
-        navigate('/home');
+      if (userData) {
+        // Store user session
+        login(userData);
+        
+        // If "Keep me logged in" is not checked, clear session on browser close
+        if (!ischecked) {
+          sessionStorage.setItem('tempSession', 'true');
+        }
+
+        // Navigate based on role
+        if (userData.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/home');
+        }
       } else {
-        alert('Login failed! Please try again.');
+        alert('Invalid username/email or password.');
       }
     } catch (error) {
       console.error('Login error:', error);

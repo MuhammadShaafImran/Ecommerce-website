@@ -7,12 +7,10 @@ const verifyPassword = (inputPassword, storedPassword) => {
 const getUserByEmailOrUsername = async (user) => {
     console.log("User data:", user);
     
-    const orFilter = `email.eq.${user.usernameOrEmail},username.eq.${user.usernameOrEmail}`;
-  
     const { data, error } = await supabase
       .from("users")
-      .select("id, password") 
-      .or(orFilter)
+      .select("*")
+      .or(`email.eq.${user.usernameOrEmail},username.eq.${user.usernameOrEmail}`)
       .single();
   
     if (error) {
@@ -20,13 +18,13 @@ const getUserByEmailOrUsername = async (user) => {
       return null;
     }
   
-    // Verify password (e.g., using bcrypt)
+    // Verify password
     const isPasswordValid = verifyPassword(user.password, data.password);
     if (!isPasswordValid) {
       return null;
     }
   
-    return data.id;
+    return data;
 }
 
 const getUserById = async (user) => {

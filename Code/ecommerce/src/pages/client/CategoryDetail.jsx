@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Grid, List, X, Star, Filter, ArrowUpDown, ChevronLeft, ChevronRight
 } from 'lucide-react';
-import ProductCard from '../components/ui/ProductCard';
+import ProductCard from '../../components/ui/ProductCard';
 import { 
   getAllCategories,
   getProductsByCategory,
   getProductsSortedByPriceLowToHigh,
   getProductsSortedByPriceHighToLow,
   getNewestProducts
-} from '../api/product/read';
+} from '../../api/product/read';
 
 const CategoryDetail = () => {
   const { category } = useParams();

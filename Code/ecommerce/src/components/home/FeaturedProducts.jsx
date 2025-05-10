@@ -57,13 +57,13 @@ const FeaturedProducts = () => {
           {/* Navigation arrows */}
           <button
             onClick={scrollLeft}
-            className="absolute top-1/2 -left-4 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-gray-700 hidden md:flex"
+            className="absolute top-1/2 -left-4 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-gray-700 md:flex"
           >
             <ChevronLeft size={24} />
           </button>
           <button
             onClick={scrollRight}
-            className="absolute top-1/2 -right-4 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-gray-700 hidden md:flex"
+            className="absolute top-1/2 -right-4 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-gray-700 md:flex"
           >
             <ChevronRight size={24} />
           </button>

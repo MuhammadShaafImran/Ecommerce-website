@@ -1,26 +1,55 @@
 // pages/Cart.jsx
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, Minus, Plus, ArrowRight, ArrowLeft, ShoppingBag } from 'lucide-react';
-import Button from '../components/ui/Button';
-import { CartContext } from '../contexts/CartContext';
+import Button from '../../components/ui/Button';
+import { CartContext } from '../../contexts/CartContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { checkStockAvailability, processOrder, clearCart as clearCartInDb } from '../../api/cart/cart';
+import supabase from '../../api/supabase';
+import { getProductById } from '../../api/product/read';
 
 const Cart = () => {
-  const { cartItems, updateQuantity, removeFromCart, clearCart } = useContext(CartContext);
+  const navigate = useNavigate();
+  const { cartItems, updateQuantity, removeFromCart, clearCart, cartId } = useContext(CartContext);
+  const { user, isAuthenticated } = useAuth();
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [couponError, setCouponError] = useState('');
   const [couponSuccess, setCouponSuccess] = useState('');
+  const [orderError, setOrderError] = useState('');
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!user && localStorage.getItem('redirectAfterLogin') !== 'cart') {
+      localStorage.setItem('redirectAfterLogin', 'cart');
+    }
+  }, [user]);
   
   // Calculate totals
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 100 ? 0 : 10;
   const total = subtotal + shipping - discount;
-
-  const handleQuantityChange = (itemId, newQuantity) => {
+  const handleQuantityChange = async (itemId, newQuantity) => {
     if (newQuantity < 1) return;
-    updateQuantity(itemId, newQuantity);
+
+    try {
+      // Check stock before updating quantity
+      const product = await getProductById(itemId);
+      
+      console.log(product);
+       
+      if (!product || product.stock < newQuantity) {
+        alert('Not enough stock available');
+        return;
+      }
+
+      updateQuantity(itemId, newQuantity);
+    } catch (error) {
+      console.error('Error checking stock:', error);
+      alert('Error updating quantity. Please try again.');
+    }
   };
 
   const handleRemoveItem = (itemId) => {
@@ -58,7 +87,49 @@ const Cart = () => {
       setLoading(false);
     }, 800);
   };
-  
+
+  const placeOrder = async () => {
+    try {
+      setLoading(true);
+      setOrderError('');
+
+      // Check if user is logged in using AuthContext
+      if (!isAuthenticated || !user?.id) {
+        localStorage.setItem('redirectAfterLogin', 'cart');
+        navigate('/login');
+        return;
+      }
+
+      // Check stock availability first
+      const stockAvailable = await checkStockAvailability(cartItems);
+      if (!stockAvailable) {
+        throw new Error('Some items in your cart are no longer in stock');
+      }
+
+      // Process the order with transaction safety
+      const orderId = await processOrder(user.id, cartItems, shipping, discount);
+
+      // Clear the cart only after successful order
+      await clearCart(cartId);
+      clearCart(); // Clear local cart state
+
+      // Navigate to checkout/payment page
+      navigate('/checkout', { 
+        state: { 
+          orderId,
+          total,
+          items: cartItems
+        } 
+      });
+
+    } catch (error) {
+      console.error('Error placing order:', error);
+      setOrderError(error.message || 'Failed to place order. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (cartItems.length === 0) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
@@ -80,6 +151,12 @@ const Cart = () => {
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-8">Your Cart</h1>
+      
+      {orderError && (
+        <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
+          {orderError}
+        </div>
+      )}
       
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Cart Items */}
@@ -210,9 +287,15 @@ const Cart = () => {
               </div>
             </div>
             
-            <Button variant="primary" className="w-full mb-4" size="lg">
+            <Button 
+              variant="primary" 
+              className="w-full mb-4" 
+              size="lg" 
+              onClick={placeOrder}
+              disabled={loading}
+            >
               <div className="flex items-center justify-center gap-2">
-                Proceed to Checkout
+                {loading ? 'Processing...' : 'Proceed to Checkout'}
                 <ArrowRight size={16} />
               </div>
             </Button>

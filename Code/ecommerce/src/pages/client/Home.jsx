@@ -1,14 +1,14 @@
 // pages/Home.jsx
 import React from 'react';
-import HeroBanner from '../components/home/HeroBanner';
-import CategorySection from '../components/home/CategorySection';
-import FeaturedProducts from '../components/home/FeaturedProducts';
-import ProductShowcase from '../components/home/ProductShowcase';
-import WeeklyDeals from '../components/home/WeeklyDeals';
-import Testimonials from '../components/home/Testimonials';
-import LatestNews from '../components/home/LatestNews';
-import FeatureIcons from '../components/home/FeatureIcons';
-import { getCompleteProductById } from '../api/product/read';
+import HeroBanner from '../../components/home/HeroBanner';
+import CategorySection from '../../components/home/CategorySection';
+import FeaturedProducts from '../../components/home/FeaturedProducts';
+import ProductShowcase from '../../components/home/ProductShowcase';
+import WeeklyDeals from '../../components/home/WeeklyDeals';
+import Testimonials from '../../components/home/Testimonials';
+import LatestNews from '../../components/home/LatestNews';
+import FeatureIcons from '../../components/home/FeatureIcons';
+import { getCompleteProductById } from '../../api/product/read';
 
 const Home = () => {
   // Get featured showcase products
