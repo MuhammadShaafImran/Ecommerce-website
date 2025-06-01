@@ -20,9 +20,10 @@ const Home = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const data = await getCompleteProductById(2);
-        setShowcaseProducts(data);
-        // console.log('Show case data : ',data);
+        const product1 = await getCompleteProductById(1);
+        const product2 = await getCompleteProductById(2);
+        setShowcaseProducts(prev => [...prev, product1, product2]);
+        console.log('Show case data:', showcaseProducts);
       } catch (err) {
         console.error('Error fetching products:', err);
         setError('Failed to load products. Please try again later.');
@@ -59,9 +60,9 @@ const Home = () => {
       <HeroBanner />
       <CategorySection />
       <FeaturedProducts />
-      <ProductShowcase product={showcaseProducts} imagePosition='right' />
+      <ProductShowcase product={showcaseProducts[0]} imagePosition='right' />
       {/* <WeeklyDeals /> */}
-      <ProductShowcase product={showcaseProducts} imagePosition='left' />
+      <ProductShowcase product={showcaseProducts[1]} imagePosition='left' />
       <Testimonials />
       <LatestNews />
       <FeatureIcons />

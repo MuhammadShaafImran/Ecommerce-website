@@ -1,29 +1,21 @@
 // components/layout/Header.jsx
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Navigation from '../shared/Navigation';
-import { ShoppingCart, User, Search, Menu, X, LogOut } from 'lucide-react';
+import { ShoppingCart, Menu, X } from 'lucide-react';
 import { CartContext } from '../../contexts/CartContext';
-import { useAuth } from '../../contexts/AuthContext';
+import AccountIcon from '../ui/AccountIcon';
 
 const Header = () => {
-  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { cartCount } = useContext(CartContext);
-  const { user, logout, isAdmin } = useAuth();
-  
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-  
+  const { cartCount } = useContext(CartContext);   
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-md sticky top-0 z-50 transition-all duration-200 border-b border-gray-100">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="font-bold text-xl text-red-500">
-            GameStore
+          <Link to="/" className="font-bold text-xl">
+            <span className="text-red-500">Gear</span>Up
           </Link>
 
           {/* Desktop Navigation */}
@@ -41,14 +33,12 @@ const Header = () => {
                 </span>
               )}
             </Link>
-            <Link to="/login" className="text-gray-600 hover:text-red-500">
-              <User size={24} />
-            </Link>
+            <AccountIcon />
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-600"
+            className="md:hidden text-gray-600 ml-4"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const AdminGuard = ({ children }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true);
   const { isAdmin, user } = useAuth();
 

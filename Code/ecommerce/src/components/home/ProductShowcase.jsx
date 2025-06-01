@@ -82,7 +82,7 @@ const ProductShowcase = ({ product, imagePosition }) => {
             <div className="flex space-x-4">
               <Button 
                 variant="primary" 
-                className="px-8 py-3 text-lg"
+                className="px-8 py-3"
                 disabled={!product.inventory || product.inventory.stock <= 0}
                 onClick={handleAddToCart}
               >

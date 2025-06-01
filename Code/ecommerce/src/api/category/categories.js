@@ -9,10 +9,6 @@ export const getAllCategories = async () => {
   return { data, error };
 };
 
-/**
- * Get categories with product counts
- * @returns {Promise<{data: Array, error: Object}>}
- */
 export const getCategoriesWithCounts = async () => {
   const { data: categories, error: categoriesError } = await supabase
     .from('categories')

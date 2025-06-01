@@ -89,7 +89,7 @@ export const checkStockAvailability = async (items) => {
     const quantities = items.map(item => item.quantity);
 
     const { data, error } = await supabase.rpc(
-      'check_stock_availability',
+      'check_stock_availability',  // Updated to use schema
       { _product_ids: productIds, _quantities: quantities }
     );
 
@@ -97,32 +97,6 @@ export const checkStockAvailability = async (items) => {
     return data;
   } catch (error) {
     console.error('Error checking stock:', error);
-    throw error;
-  }
-};
-
-export const processOrder = async (userId, items, shippingCost, discountAmount) => {
-  try {
-    const productIds = items.map(item => item.id);
-    const quantities = items.map(item => item.quantity);
-    const prices = items.map(item => item.price);
-
-    const { data, error } = await supabase.rpc(
-      'process_order',
-      {
-        _user_id: userId,
-        _product_ids: productIds,
-        _quantities: quantities,
-        _prices: prices,
-        _shipping_cost: shippingCost,
-        _discount_amount: discountAmount
-      }
-    );
-
-    if (error) throw error;
-    return data; // Returns the order ID
-  } catch (error) {
-    console.error('Error processing order:', error);
     throw error;
   }
 };

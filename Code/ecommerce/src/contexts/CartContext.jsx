@@ -1,78 +1,87 @@
 // contexts/CartContext.jsx
 import React, { createContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 import supabase from '../api/supabase';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [cartId, setCartId] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Initialize cart from localStorage and sync with database
+  // Initialize cart whenever user changes
   useEffect(() => {
     const initializeCart = async () => {
-      // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (user) {
-        // Try to get active cart from database
-        const { data: cart } = await supabase
-          .from('carts')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('is_active', true)
-          .single();
+      try {
+        if (user) {
+          // Try to get active cart from database
+          const { data: cart } = await supabase
+            .from('carts')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('is_active', true)
+            .single();
 
-        if (cart) {
-          setCartId(cart.id);
-          // Get cart items
-          const { data: items } = await supabase
-            .from('cart_items')
-            .select(`
-              *,
-              products:product_id (
-                id,
-                name,
-                price,
-                product_images (url)
-              )
-            `)
-            .eq('cart_id', cart.id);
+          if (cart) {
+            setCartId(cart.id);
+            // Get cart items
+            const { data: items } = await supabase
+              .from('cart_items')
+              .select(`
+                *,
+                products:product_id (
+                  id,
+                  name,
+                  price,
+                  inventory (stock),
+                  product_images (url)
+                )
+              `)
+              .eq('cart_id', cart.id);
 
-          if (items) {
-            const formattedItems = items.map(item => ({
-              id: item.product_id,
-              title: item.products.name,
-              price: parseFloat(item.products.price),
-              quantity: item.quantity,
-              image: item.products.product_images?.[0]?.url || '/placeholder.jpg',
-              cartItemId: item.id
-            }));
-            setCartItems(formattedItems);
+            if (items) {
+              const formattedItems = items.map(item => ({
+                id: item.product_id,
+                title: item.products.name,
+                price: parseFloat(item.products.price),
+                quantity: item.quantity,
+                stock: item.products.inventory?.stock || 0,
+                image: item.products.product_images?.[0]?.url || '/placeholder.jpg',
+                cartItemId: item.id
+              }));
+              setCartItems(formattedItems);
+            }
           }
+        } else {
+          // For non-logged in users, use localStorage
+          const savedCart = localStorage.getItem('gameCart');
+          if (savedCart) {
+            setCartItems(JSON.parse(savedCart));
+          }
+          setCartId(null); // Clear cartId when logged out
         }
-      } else {
-        // If not logged in, get cart from localStorage
-        const savedCart = localStorage.getItem('gameCart');
-        if (savedCart) {
-          setCartItems(JSON.parse(savedCart));
-        }
+      } catch (error) {
+        console.error('Error initializing cart:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     initializeCart();
-  }, []);
+  }, [user]); // Re-run when user changes (login/logout)
 
-  // Save cart to localStorage whenever it changes
+  // Save to localStorage for non-logged in users
   useEffect(() => {
-    localStorage.setItem('gameCart', JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (!user) {
+      localStorage.setItem('gameCart', JSON.stringify(cartItems));
+    }
+  }, [cartItems, user]);
+
+  // Add item to cart
   const addToCart = async (product, quantity = 1) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
       if (user) {
         if (!cartId) {
           // Create new cart if needed
@@ -84,20 +93,9 @@ export const CartProvider = ({ children }) => {
           
           if (cart) setCartId(cart.id);
         }
-
-        // Check product stock before adding
-        const { data: productData } = await supabase
-          .from('products')
-          .select('stock')
-          .eq('id', product.id)
-          .single();
-
-        if (!productData || productData.stock < quantity) {
-          throw new Error('Not enough stock available');
-        }
       }
 
-      // Check if product already exists in cart
+      // Check if product already exists
       const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
       
       if (existingItemIndex !== -1) {
@@ -113,6 +111,7 @@ export const CartProvider = ({ children }) => {
         title: product.name,
         price: parseFloat(product.price),
         quantity: quantity,
+        stock: product.inventory?.stock || 0,
         image: product.images?.[0]?.url || '/placeholder.jpg'
       };
 
@@ -136,25 +135,13 @@ export const CartProvider = ({ children }) => {
       setCartItems(prev => [...prev, newItem]);
     } catch (error) {
       console.error('Error adding to cart:', error);
+      throw error;
     }
   };
+
+  // Update quantity
   const updateQuantity = async (productId, newQuantity) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      // Check product stock before updating
-      if (user) {
-        const { data: productData } = await supabase
-          .from('products')
-          .select('stock')
-          .eq('id', productId)
-          .single();
-
-        if (!productData || productData.stock < newQuantity) {
-          throw new Error('Not enough stock available');
-        }
-      }
-
       const updatedItems = cartItems.map(item => {
         if (item.id === productId) {
           // Update in database if logged in
@@ -172,14 +159,13 @@ export const CartProvider = ({ children }) => {
       setCartItems(updatedItems);
     } catch (error) {
       console.error('Error updating quantity:', error);
-      alert(error.message);
+      throw error;
     }
   };
 
+  // Remove from cart
   const removeFromCart = async (productId) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
       const itemToRemove = cartItems.find(item => item.id === productId);
       
       // Remove from database if logged in
@@ -193,13 +179,13 @@ export const CartProvider = ({ children }) => {
       setCartItems(prev => prev.filter(item => item.id !== productId));
     } catch (error) {
       console.error('Error removing from cart:', error);
+      throw error;
     }
   };
 
+  // Clear cart
   const clearCart = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
       // Clear database cart if logged in
       if (user && cartId) {
         await supabase
@@ -216,9 +202,12 @@ export const CartProvider = ({ children }) => {
       }
 
       setCartItems([]);
-      localStorage.removeItem('gameCart');
+      if (!user) {
+        localStorage.removeItem('gameCart');
+      }
     } catch (error) {
       console.error('Error clearing cart:', error);
+      throw error;
     }
   };
 

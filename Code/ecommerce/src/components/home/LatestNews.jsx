@@ -46,7 +46,9 @@ const LatestNews = () => {
           ))}
         </div>
         <div className="text-center">
-          <Button variant="outline">View All News</Button>
+          <Button variant="outline"className='px-8 py-3'>
+            View All News
+          </Button>
         </div>
       </div>
     </section>

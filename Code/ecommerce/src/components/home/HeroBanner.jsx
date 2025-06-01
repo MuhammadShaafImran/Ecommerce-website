@@ -14,7 +14,9 @@ const HeroBanner = () => {
           <p className="text-gray-600 mb-6 md:pr-12">
             Enhance your gaming experience with our premium controllers, designed for precision, comfort and durability.
           </p>
-          <Button size="large">SHOP NOW</Button>
+          <Button className='px-[2.5rem] py-[1rem]'>
+            SHOP NOW
+          </Button>
         </div>
         <div className="md:w-1/2">
           <img 

@@ -78,10 +78,8 @@ CREATE TABLE addresses (
 CREATE TABLE payments (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
-  amount DECIMAL NOT NULL,
   method VARCHAR NOT NULL,
   status VARCHAR NOT NULL,
-  transaction_id VARCHAR,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -89,9 +87,12 @@ CREATE TABLE payments (
 CREATE TABLE orders (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
-  payment_id INTEGER NOT NULL REFERENCES payments(id),
-  address_id INTEGER NOT NULL REFERENCES addresses(id),
+  payment_id INTEGER REFERENCES payments(id),
+  address_id INTEGER REFERENCES addresses(id),
   status VARCHAR NOT NULL,
+  total_amount DECIMAL NOT NULL,
+  shipping_cost DECIMAL NOT NULL DEFAULT 0,
+  discount_amount DECIMAL NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -124,176 +125,3 @@ CREATE TABLE specifications (
     weight VARCHAR(255),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
-
-
-
-
---------------------------------------------------------------------------------------------------
--- Create a transaction management schema
-CREATE SCHEMA IF NOT EXISTS transactions;
-
--- Function to check stock availability for multiple products
-CREATE OR REPLACE FUNCTION transactions.check_stock_availability(
-    _product_ids INTEGER[],
-    _quantities INTEGER[]
-) RETURNS BOOLEAN AS $$
-DECLARE
-    i INTEGER;
-    _available BOOLEAN := TRUE;
-BEGIN
-    IF array_length(_product_ids, 1) != array_length(_quantities, 1) THEN 
-        RAISE EXCEPTION 'Arrays must have equal length';
-    END IF;
-
-    FOR i IN 1..array_length(_product_ids, 1) LOOP
-        IF NOT EXISTS (
-            SELECT 1 FROM products 
-            WHERE id = _product_ids[i] AND stock >= _quantities[i]
-        ) THEN
-            _available := FALSE;
-            EXIT;
-        END IF;
-    END LOOP;
-
-    RETURN _available;
-END;
-$$ LANGUAGE plpgsql;
-
--- Function to reduce stock
-CREATE OR REPLACE FUNCTION transactions.reduce_stock(
-    _product_id INTEGER,
-    _quantity INTEGER
-) RETURNS VOID AS $$
-BEGIN
-    UPDATE products
-    SET stock = stock - _quantity
-    WHERE id = _product_id AND stock >= _quantity;
-    
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Failed to update stock for product %', _product_id;
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
--- Function to process an order
-CREATE OR REPLACE FUNCTION transactions.process_order(
-    _user_id INTEGER,
-    _product_ids INTEGER[],
-    _quantities INTEGER[],
-    _prices DECIMAL[],
-    _shipping_cost DECIMAL,
-    _discount_amount DECIMAL
-) RETURNS INTEGER AS $$
-DECLARE
-    _order_id INTEGER;
-    _total_amount DECIMAL := 0;
-    i INTEGER;
-BEGIN
-    -- Calculate total amount
-    FOR i IN 1..array_length(_product_ids, 1) LOOP
-        _total_amount := _total_amount + (_prices[i] * _quantities[i]);
-    END LOOP;
-    
-    -- Add shipping and subtract discount
-    _total_amount := _total_amount + _shipping_cost - _discount_amount;
-
-    -- Create order
-    INSERT INTO orders (
-        user_id,
-        status,
-        total_amount,
-        shipping_cost,
-        discount_amount,
-        created_at
-    ) VALUES (
-        _user_id,
-        'pending',
-        _total_amount,
-        _shipping_cost,
-        _discount_amount,
-        CURRENT_TIMESTAMP
-    ) RETURNING id INTO _order_id;
-
-    -- Create order items and reduce stock
-    FOR i IN 1..array_length(_product_ids, 1) LOOP
-        -- Add order item
-        INSERT INTO order_items (
-            order_id,
-            product_id,
-            quantity,
-            price_at_time
-        ) VALUES (
-            _order_id,
-            _product_ids[i],
-            _quantities[i],
-            _prices[i]
-        );
-
-        -- Reduce stock
-        PERFORM transactions.reduce_stock(_product_ids[i], _quantities[i]);
-    END LOOP;
-
-    RETURN _order_id;
-END;
-$$ LANGUAGE plpgsql;
-
--- Function to clear cart
-CREATE OR REPLACE FUNCTION transactions.clear_cart(
-    _cart_id INTEGER
-) RETURNS VOID AS $$
-BEGIN
-    -- Delete cart items
-    DELETE FROM cart_items WHERE cart_id = _cart_id;
-    
-    -- Mark cart as inactive
-    UPDATE carts 
-    SET is_active = false,
-        updated_at = CURRENT_TIMESTAMP
-    WHERE id = _cart_id;
-    
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Cart not found: %', _cart_id;
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
--- Function to update product stock
-CREATE OR REPLACE FUNCTION update_stock(product_id INTEGER, reduce_by INTEGER)
-RETURNS VOID AS $$
-BEGIN
-    -- Check if there's enough stock
-    IF EXISTS (
-        SELECT 1
-        FROM products
-        WHERE id = product_id AND stock >= reduce_by
-    ) THEN
-        -- Update stock
-        UPDATE products
-        SET stock = stock - reduce_by
-        WHERE id = product_id;
-    ELSE
-        RAISE EXCEPTION 'Not enough stock available';
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
--- Function to update multiple products' stock in a transaction
-CREATE OR REPLACE FUNCTION update_multiple_stock(
-    product_ids INTEGER[],
-    quantities INTEGER[]
-)
-RETURNS VOID AS $$
-DECLARE
-    i INTEGER;
-BEGIN
-    -- Check array lengths match
-    IF array_length(product_ids, 1) != array_length(quantities, 1) THEN
-        RAISE EXCEPTION 'Product IDs and quantities arrays must be the same length';
-    END IF;
-    
-    -- Loop through products and update stock
-    FOR i IN 1..array_length(product_ids, 1) LOOP
-        PERFORM update_stock(product_ids[i], quantities[i]);
-    END LOOP;
-END;
-$$ LANGUAGE plpgsql;

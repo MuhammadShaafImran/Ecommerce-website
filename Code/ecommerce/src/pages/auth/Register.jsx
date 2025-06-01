@@ -24,7 +24,7 @@ export default function Register() {
       return;
     }
     console.log('Form submitted:', formData);
-    result = await registerUser(formData);
+    const result = await registerUser(formData);
     if (result) {
       alert('Registration successful!');
       navigate('/login');
